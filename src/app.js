@@ -162,8 +162,7 @@
 
   // ---------- font matching ----------
   function ensureMatched(it) {
-    if (it.match) return;
-    it.match = FontMatch.match(it, candidates());
+    if (!it.match) it.match = FontMatch.match(it, candidates());
     if (!it.style) resetStyle(it);
   }
 
@@ -486,7 +485,16 @@
     els.stageWrap.addEventListener(ev, e => { e.preventDefault(); els.dropzone.classList.remove('hover'); });
   }
   els.stageWrap.addEventListener('drop', e => loadFile(e.dataTransfer.files[0]));
-  els.dropzone.addEventListener('click', () => els.fileInput.click());
+  els.dropzone.addEventListener('click', e => { if (e.target.id !== 'sampleBtn') els.fileInput.click(); });
+  $('sampleBtn').addEventListener('click', async () => {
+    try {
+      const res = await fetch('assets/sample.png');
+      const blob = await res.blob();
+      loadFile(new File([blob], 'sample.png', { type: 'image/png' }));
+    } catch {
+      setStatus('The sample only loads when the page is served over http(s), e.g. on GitHub Pages or via "python -m http.server".');
+    }
+  });
 
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && document.activeElement === document.body) deselect();

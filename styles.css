@@ -104,6 +104,12 @@ input[type="color"] {
 .dropzone.hover { border-color: var(--accent); background: var(--accent-soft); }
 .dz-title { font-size: 17px; font-weight: 600; margin-bottom: 6px; }
 .dz-sub { color: var(--muted); max-width: 460px; }
+.link-btn {
+  margin-top: 14px;
+  background: none; border: none; padding: 4px;
+  font: inherit; color: var(--accent); cursor: pointer;
+  text-decoration: underline; text-underline-offset: 3px;
+}
 
 .stage {
   position: relative;
@@ -123,7 +129,9 @@ input[type="color"] {
   cursor: pointer;
 }
 .box:hover { background: rgba(37, 99, 235, 0.16); }
-.box.edited { border-color: rgba(22, 163, 74, 0.7); background: rgba(22, 163, 74, 0.05); }
+/* Edited lines show the result cleanly; their outline appears only on hover. */
+.box.edited { border-color: transparent; background: transparent; }
+.box.edited:hover { border-color: rgba(22, 163, 74, 0.7); background: rgba(22, 163, 74, 0.05); }
 .box.selected { border: 2px solid var(--accent); background: transparent; }
 .stage.adding .box { pointer-events: none; }
 .drag-rect {

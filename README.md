@@ -1,19 +1,32 @@
 # Photo Text Editor
 
-Upload a screenshot or photo. The tool detects its text automatically, and you can click any
-line and retype it. The replacement keeps the original font, weight, size, color and position,
-and the background behind it is preserved.
+**Edit text in any screenshot. It matches the exact font, size and color.**
+Runs entirely in your browser; your image is never uploaded.
 
-Everything runs in the browser. The image never leaves your machine: OCR runs locally in
-WebAssembly, and only the OCR engine and font files are downloaded.
+### [▶ Try it live](https://thrishal12345.github.io/photo-text-editor/)
 
-## Run it
+![Demo: a screenshot's text is detected, then edited in the same font, size and color](assets/demo.gif)
 
-Open `index.html` in Chrome or Edge (double-click it). There's no build step and no install.
-You need an internet connection the first time, to download Tesseract.js (~5 MB, then cached)
-and the Google Fonts used for matching.
+Upload a screenshot or photo and every line of text is detected automatically. Click any line
+and retype it. The new text is drawn in the original font, weight, size and color at the same
+position, and the old text is erased cleanly, even on buttons, dark mode, gradients and photos.
 
-Or serve the folder: `python -m http.server` and open http://localhost:8000.
+**Good for:**
+- Fixing typos in documentation or marketing screenshots without re-taking them
+- Updating outdated tutorials when a UI label or menu name changes
+- Translating or localizing UI screenshots
+- Quick design mockups: try new copy on a real screen
+- Hiding names or numbers by replacing them with placeholder text
+
+## Run it locally
+
+The live link above needs nothing installed. To run it yourself, open `index.html` in Chrome
+or Edge (double-click it). There's no build step and no install. You need an internet
+connection the first time, to download Tesseract.js (~5 MB, then cached) and the Google Fonts
+used for matching.
+
+Or serve the folder: `python -m http.server` and open http://localhost:8000. Serving is also
+what makes the "Try a sample" link work.
 
 ## Use it
 
@@ -66,3 +79,7 @@ add the font to `SYSTEM` (if installed) or `GOOGLE` in `src/fonts.js`.
 - OCR quality depends on Tesseract. Very small text (under ~9px), stylized display fonts and
   non-Latin scripts may need the **+ Region** tool. Only English (`eng`) is loaded; change it in
   `OCR.warmUp` / `createWorker('eng', …)` in `src/ocr.js`.
+
+## License
+
+[MIT](LICENSE)

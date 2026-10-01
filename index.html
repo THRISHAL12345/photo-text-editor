@@ -4,6 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Photo Text Editor</title>
+  <meta name="description" content="Edit text in any screenshot. It matches the exact font, size and color. Runs entirely in your browser; nothing is uploaded.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Photo Text Editor">
+  <meta property="og:description" content="Edit text in any screenshot. It matches the exact font, size and color. Runs entirely in your browser; nothing is uploaded.">
+  <meta property="og:url" content="https://thrishal12345.github.io/photo-text-editor/">
+  <meta property="og:image" content="https://thrishal12345.github.io/photo-text-editor/assets/social-preview.png">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"></script>
 </head>
@@ -38,6 +45,7 @@
         <div class="dz-inner">
           <div class="dz-title">Drop an image, paste a screenshot (Ctrl+V), or click Upload</div>
           <div class="dz-sub">Text is detected automatically. Click any box to edit it. The tool keeps the font, size and color.</div>
+          <button id="sampleBtn" class="link-btn" type="button">No screenshot handy? Try a sample</button>
         </div>
       </div>
       <div id="stage" class="stage" hidden>
