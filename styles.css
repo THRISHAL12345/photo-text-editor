@@ -46,7 +46,7 @@ body {
 }
 .brand { font-weight: 600; font-size: 15px; }
 .actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.zoom { display: flex; gap: 2px; }
+.zoom, .group { display: flex; gap: 2px; }
 
 .btn {
   display: inline-flex;
@@ -132,7 +132,11 @@ input[type="color"] {
 /* Edited lines show the result cleanly; their outline appears only on hover. */
 .box.edited { border-color: transparent; background: transparent; }
 .box.edited:hover { border-color: rgba(22, 163, 74, 0.7); background: rgba(22, 163, 74, 0.05); }
-.box.selected { border: 2px solid var(--accent); background: transparent; }
+.box.selected { border: 2px solid var(--accent); background: transparent; cursor: move; }
+.box { touch-action: none; }
+.box.dragging { cursor: grabbing; }
+.overlay.hidden .box.match:not(.selected),
+.box.match { border: 2px solid #f59e0b; background: rgba(245, 158, 11, 0.12); }
 .stage.adding .box { pointer-events: none; }
 .drag-rect {
   position: absolute;
@@ -191,6 +195,17 @@ input[type="color"] {
 .seg button:first-child { border-radius: 6px 0 0 6px; }
 .seg button:last-child { border-radius: 0 6px 6px 0; }
 .seg button.active { background: var(--accent-soft); border-color: var(--accent); }
+
+.find { border-bottom: 1px solid var(--border); }
+.find summary {
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+}
+.find-body { padding: 0 16px 12px; display: flex; flex-direction: column; gap: 8px; }
+.find-row { align-items: center; justify-content: space-between; }
+.find-row .muted { flex: 1; }
 
 .list-head {
   display: flex; align-items: center; gap: 8px;

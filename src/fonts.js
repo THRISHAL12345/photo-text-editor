@@ -97,10 +97,70 @@ const Fonts = (() => {
     return readyPromise;
   }
 
+  // --- User-uploaded fonts --------------------------------------------------
+  // Lets people match fonts that aren't installed, e.g. SF Pro for Mac/iPhone
+  // screenshots. Family, weight and style are read from the file name
+  // ("SF-Pro-Text-Semibold.otf" -> "SF Pro Text", 600).
+  const custom = [];
+  const WEIGHT_WORDS = {
+    thin: 100, hairline: 100, extralight: 200, ultralight: 200, light: 300,
+    regular: 400, normal: 400, book: 400, roman: 400, medium: 500,
+    semibold: 600, demibold: 600, bold: 700, extrabold: 800, ultrabold: 800,
+    heavy: 900, black: 900,
+  };
+  const FONT_FILE = /\.(ttf|otf|woff2?)$/i;
+
+  function parseFontName(fileName) {
+    const raw = fileName.replace(FONT_FILE, '');
+    const variable = /variable|\[[^\]]*wght[^\]]*\]/i.test(raw);
+    const tokens = raw.replace(/\[[^\]]*\]/g, '').replace(/VariableFont.*$/i, '').split(/[-_\s]+/).filter(Boolean);
+    let weight = 400, italic = false;
+    const keep = [];
+    for (const t of tokens) {
+      let w = t.toLowerCase();
+      if (w === 'variable' || w === 'vf') continue;
+      if (w.endsWith('italic') || w.endsWith('oblique')) {
+        italic = true;
+        w = w.replace(/(italic|oblique)$/, '');
+        if (!w) continue;
+      }
+      if (w in WEIGHT_WORDS) weight = WEIGHT_WORDS[w];
+      else keep.push(t);
+    }
+    let family = keep.join(' ') || 'Uploaded font';
+    // Don't merge into a font of the same name that's already present (a Google font, or
+    // an installed system font). An uploaded "SF Pro Text" on Windows keeps its name.
+    const same = f => f.family.toLowerCase() === family.toLowerCase();
+    const clash = GOOGLE.some(same) || SYSTEM.some(f => same(f) && isInstalled(f.family));
+    if (clash) family += ' (uploaded)';
+    return { family, weight, italic, variable };
+  }
+
+  async function addFontFile(file) {
+    const { family, weight, italic, variable } = parseFontName(file.name);
+    const face = new FontFace(family, await file.arrayBuffer(), {
+      weight: variable ? '100 900' : String(weight),
+      style: italic ? 'italic' : 'normal',
+    });
+    await face.load();
+    document.fonts.add(face);
+    let entry = custom.find(f => f.family === family);
+    if (!entry) { entry = { family, weights: [] }; custom.push(entry); }
+    // Italic faces are used when "Italic" is ticked; matching tries upright weights.
+    const weights = variable ? [300, 400, 500, 600, 700] : italic ? [] : [weight];
+    for (const w of weights) if (!entry.weights.includes(w)) entry.weights.push(w);
+    entry.weights.sort((a, b) => a - b);
+    if (!entry.weights.length) entry.weights.push(400);
+    return { family, weight: variable ? 'variable' : weight, italic };
+  }
+
   return {
     ready,
     fontStr,
-    get available() { return available; },
-    get all() { return [...SYSTEM, ...GOOGLE]; },
+    addFontFile,
+    parseFontName,
+    isFontFile: file => FONT_FILE.test(file.name),
+    get available() { return available.length ? [...custom, ...available] : []; },
+    get all() { return [...custom, ...SYSTEM, ...GOOGLE]; },
   };
 })();

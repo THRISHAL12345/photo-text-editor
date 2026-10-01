@@ -27,6 +27,14 @@
         <option value="auto">Document / paragraphs</option>
       </select>
       <button id="addRegionBtn" class="btn" disabled title="Drag a box around text that wasn't detected">+ Region</button>
+      <label class="btn" title="Upload .ttf / .otf / .woff fonts to match, e.g. SF Pro for Mac and iPhone screenshots. You can also drop font files on the page.">
+        + Font
+        <input id="fontInput" type="file" accept=".ttf,.otf,.woff,.woff2" multiple hidden>
+      </label>
+      <div class="group">
+        <button id="undoBtn" class="btn icon" disabled title="Undo (Ctrl+Z)">↶</button>
+        <button id="redoBtn" class="btn icon" disabled title="Redo (Ctrl+Shift+Z)">↷</button>
+      </div>
       <label class="toggle"><input id="showBoxes" type="checkbox" checked> Boxes</label>
       <button id="compareBtn" class="btn" disabled title="Hold to view the original">Hold to compare</button>
       <div class="zoom">
@@ -35,6 +43,7 @@
         <button id="zoomIn" class="btn icon" title="Zoom in">+</button>
       </div>
       <button id="resetAllBtn" class="btn" disabled>Reset all</button>
+      <button id="copyBtn" class="btn" disabled title="Copy the edited image to the clipboard (Ctrl+C)">Copy</button>
       <button id="downloadBtn" class="btn primary" disabled>Download PNG</button>
     </div>
   </header>
@@ -122,6 +131,19 @@
           <button id="resetBtn" class="btn">Reset</button>
         </div>
       </div>
+
+      <details id="findPanel" class="find" hidden>
+        <summary>Find &amp; replace</summary>
+        <div class="find-body">
+          <input id="findInput" type="text" placeholder="Find" autocomplete="off" spellcheck="false">
+          <input id="replaceInput" type="text" placeholder="Replace with" autocomplete="off" spellcheck="false">
+          <div class="row find-row">
+            <label class="toggle"><input id="matchCase" type="checkbox"> Match case</label>
+            <span id="findCount" class="muted"></span>
+            <button id="replaceAllBtn" class="btn primary" disabled>Replace all</button>
+          </div>
+        </div>
+      </details>
 
       <div class="list-head">
         <span>Detected text</span>

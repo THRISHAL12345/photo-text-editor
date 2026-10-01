@@ -33,14 +33,32 @@ what makes the "Try a sample" link work.
 1. **Upload**, drag-and-drop, or **paste** a screenshot (Ctrl+V).
 2. Detected lines get boxes. Click one (or pick it from the list on the right).
 3. Type the new text. The canvas updates live. **Enter** / **Tab** jumps to the next line.
-4. Adjust if needed: font, weight, size, letter spacing, color, alignment, nudge X/Y.
-5. **Hold to compare** shows the original. **Download PNG** exports at full resolution.
+4. Adjust if needed: font, weight, size, letter spacing, color, alignment. **Drag the text**
+   to move it, or nudge it with the arrow keys.
+5. **Hold to compare** shows the original. **Copy** puts the result on your clipboard, ready
+   to paste into Slack or a doc. **Download PNG** saves it at full resolution.
 
-If some text wasn't detected, click **+ Region** and drag a box around it. If nothing is
-recognized there, you still get an empty box you can type into.
+- **Find & replace** (in the side panel) changes a word or name everywhere in the image at once,
+  each line in its own font. Matching boxes are highlighted as you type.
+- **Undo / redo** covers everything: typing, moves, style changes, replace-all and resets.
+- **+ Font** adds your own font file (.ttf, .otf, .woff, .woff2) for matching. You can also drop
+  font files onto the page. See [Fonts](#fonts).
+- If some text wasn't detected, click **+ Region** and drag a box around it. If nothing is
+  recognized there, you still get an empty box you can type into.
 
 **Detection mode:** use *Screenshot / UI* (sparse text, the default) for apps and web pages,
 and *Document* for paragraphs of running text.
+
+### Keyboard shortcuts
+
+| Keys | Action |
+|---|---|
+| Ctrl+V | Paste a screenshot |
+| Enter / Tab, Shift+Tab | Next / previous line |
+| Ctrl+Z, Ctrl+Shift+Z (or Ctrl+Y) | Undo, redo |
+| Arrow keys (Shift = 10px) | Move the selected text. Use Alt+arrows while typing. |
+| Ctrl+C | Copy the edited image (when you're not typing) |
+| Esc | Deselect |
 
 ## How it works
 
@@ -64,8 +82,18 @@ Poppins, Noto Sans, Source Sans 3, Nunito Sans, IBM Plex Sans, Merriweather, Pla
 Roboto Mono, JetBrains Mono). Fonts that aren't installed are skipped automatically.
 
 **If a screenshot uses a font that isn't in the list**, the closest one is chosen. For example,
-macOS screenshots use SF Pro, which usually matches to Inter on Windows. To get an exact match,
-add the font to `SYSTEM` (if installed) or `GOOGLE` in `src/fonts.js`.
+macOS and iPhone screenshots use SF Pro, which usually matches to Inter on Windows. For an exact
+match, click **+ Font** and upload the font files. Apple's SF Pro is a free download from
+developer.apple.com/fonts. Lines you haven't edited are re-matched automatically, so the
+uploaded font is picked wherever it fits best. For lines you already edited, click
+**Re-match font**.
+
+The family, weight and style are read from the file name: `SF-Pro-Text-Semibold.otf` becomes
+SF Pro Text 600, `Acme-BoldItalic.ttf` becomes Acme 700 italic. Variable fonts (`[wght]` or
+"Variable" in the name) cover weights 300–700. Uploaded fonts stay on your machine and last
+until you reload the page.
+
+To add a font permanently, add it to `SYSTEM` (if installed) or `GOOGLE` in `src/fonts.js`.
 
 ## Limitations
 
