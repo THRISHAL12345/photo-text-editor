@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Photo Text Editor</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Photo Text Editor</div>
+    <div class="actions">
+      <label class="btn primary">
+        Upload image
+        <input id="fileInput" type="file" accept="image/*" hidden>
+      </label>
+      <select id="modeSelect" title="Detection mode">
+        <option value="sparse">Screenshot / UI</option>
+        <option value="auto">Document / paragraphs</option>
+      </select>
+      <button id="addRegionBtn" class="btn" disabled title="Drag a box around text that wasn't detected">+ Region</button>
+      <label class="toggle"><input id="showBoxes" type="checkbox" checked> Boxes</label>
+      <button id="compareBtn" class="btn" disabled title="Hold to view the original">Hold to compare</button>
+      <div class="zoom">
+        <button id="zoomOut" class="btn icon" title="Zoom out">−</button>
+        <button id="zoomFit" class="btn" title="Fit to screen">Fit</button>
+        <button id="zoomIn" class="btn icon" title="Zoom in">+</button>
+      </div>
+      <button id="resetAllBtn" class="btn" disabled>Reset all</button>
+      <button id="downloadBtn" class="btn primary" disabled>Download PNG</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section id="stageWrap" class="stage-wrap">
+      <div id="dropzone" class="dropzone">
+        <div class="dz-inner">
+          <div class="dz-title">Drop an image, paste a screenshot (Ctrl+V), or click Upload</div>
+          <div class="dz-sub">Text is detected automatically. Click any box to edit it. The tool keeps the font, size and color.</div>
+        </div>
+      </div>
+      <div id="stage" class="stage" hidden>
+        <canvas id="view"></canvas>
+        <div id="overlay" class="overlay"></div>
+        <div id="dragRect" class="drag-rect" hidden></div>
+      </div>
+    </section>
+
+    <aside class="panel">
+      <div id="status" class="status">Waiting for an image…</div>
+      <div id="progress" class="progress" hidden><div id="progressBar"></div></div>
+
+      <div id="editor" class="editor" hidden>
+        <div class="field">
+          <div class="label">Original <span id="origConf" class="muted"></span></div>
+          <div id="origText" class="orig-text"></div>
+        </div>
+        <div class="field">
+          <label class="label" for="textInput">New text</label>
+          <input id="textInput" type="text" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="row">
+          <div class="field grow">
+            <label class="label" for="fontSelect">Font <span id="matchInfo" class="muted"></span></label>
+            <select id="fontSelect"></select>
+          </div>
+          <div class="field">
+            <label class="label" for="weightSelect">Weight</label>
+            <select id="weightSelect">
+              <option>300</option><option>400</option><option>500</option>
+              <option>600</option><option>700</option><option>800</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label class="label" for="sizeInput">Size (px)</label>
+            <input id="sizeInput" type="number" step="0.25" min="1">
+          </div>
+          <div class="field">
+            <label class="label" for="spacingInput">Spacing</label>
+            <input id="spacingInput" type="number" step="0.05">
+          </div>
+          <div class="field">
+            <label class="label" for="colorInput">Color</label>
+            <input id="colorInput" type="color">
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <span class="label">Align</span>
+            <div class="seg" id="alignSeg">
+              <button data-align="left">Left</button>
+              <button data-align="center">Center</button>
+              <button data-align="right">Right</button>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label" for="dxInput">Nudge X</label>
+            <input id="dxInput" type="number" step="0.5">
+          </div>
+          <div class="field">
+            <label class="label" for="dyInput">Nudge Y</label>
+            <input id="dyInput" type="number" step="0.5">
+          </div>
+        </div>
+        <div class="row">
+          <label class="toggle"><input id="italicInput" type="checkbox"> Italic</label>
+        </div>
+        <div class="row buttons">
+          <button id="rematchBtn" class="btn">Re-match font</button>
+          <button id="eraseBtn" class="btn">Erase text</button>
+          <button id="resetBtn" class="btn">Reset</button>
+        </div>
+      </div>
+
+      <div class="list-head">
+        <span>Detected text</span>
+        <input id="filterInput" type="search" placeholder="Filter…">
+      </div>
+      <ul id="itemList" class="item-list"></ul>
+    </aside>
+  </main>
+
+  <script src="src/fonts.js"></script>
+  <script src="src/analyze.js"></script>
+  <script src="src/fontmatch.js"></script>
+  <script src="src/ocr.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>
